@@ -8,10 +8,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application Information
+    | Manifest Information
     |--------------------------------------------------------------------------
     |
-    | This is the information about the application.
+    | See: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest
     |
     */
 
@@ -21,9 +21,16 @@ return [
 
     'short_name' => env('APP_NAME', 'Laravel'),
 
+    'description' => env(
+        'APP_DESCRIPTION',
+        'Pets.net is a social network for pet owners.',
+    ),
+
     'start_url' => '/',
 
-    'display' => 'standalone',
+    'scope' => '/',
+
+    'display' => 'minimal-ui',
 
     'background_color' => '#000000',
 
@@ -64,4 +71,6 @@ return [
     'lang' => env('APP_LOCALE', 'en'),
 
     'dir' => 'ltr',
+
+    'orientation' => 'portrait',
 ];
