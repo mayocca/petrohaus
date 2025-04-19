@@ -46,6 +46,21 @@ return [
         'category' => 'category.png',
     ],
 
+    'screenshots' => [
+        [
+            'src' => 'icon-512.png',
+            'sizes' => '512x512',
+            'type' => 'image/png',
+            'form_factor' => 'narrow',
+        ],
+        [
+            'src' => 'icon-512.png',
+            'sizes' => '512x512',
+            'type' => 'image/png',
+            'form_factor' => 'wide',
+        ],
+    ],
+
     'lang' => env('APP_LOCALE', 'en'),
 
     'dir' => 'ltr',

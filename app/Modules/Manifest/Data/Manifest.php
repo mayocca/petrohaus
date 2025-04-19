@@ -8,7 +8,7 @@ use Illuminate\Contracts\Support\Jsonable;
 
 readonly class Manifest implements Jsonable
 {
-    public const SCHEMA = 'https://json.schemastore.org/web-manifest.json';
+    public const SCHEMA = 'https://json.schemastore.org/web-manifest-combined.json';
 
     public function toJson($options = 0)
     {
