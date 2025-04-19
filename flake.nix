@@ -4,23 +4,34 @@
     nixpkgs.url = "nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, flake-utils, nixpkgs, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      flake-utils,
+      nixpkgs,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
-        pkgs = (import nixpkgs {
+        pkgs = (
+          import nixpkgs {
             inherit system;
-        });
+          }
+        );
         php = pkgs.php.buildEnv {
-            extensions = { enabled, all }: enabled ++ (with all; [ swoole ]);
+          extensions = { enabled, all }: enabled ++ (with all; [ swoole ]);
         };
-      in {
+      in
+      {
         devShells.default = pkgs.mkShell {
-            buildInputs = with pkgs; [
-                nodejs
-                php
-                php.packages.composer
-            ];
+          buildInputs = with pkgs; [
+            nodejs
+            php
+            php.packages.composer
+          ];
         };
+
         formatter = pkgs.nixfmt-rfc-style;
       }
     );
