@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/manifest.json', function () {
-    return response()->json(config('manifest'));
-});
+Route::name('manifest')
+    ->get('/manifest.json', function () {
+        return response()->json(config('manifest'));
+    });

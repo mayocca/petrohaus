@@ -19,6 +19,7 @@
         "lightningcss-linux-x64-gnu": "^1.29.1"
     },
     "devDependencies": {
-        "chokidar": "^4.0.3"
+        "chokidar": "^4.0.3",
+        "vite-plugin-manifest-sri": "^0.2.0"
     }
 }
