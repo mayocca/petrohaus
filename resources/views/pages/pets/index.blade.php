@@ -3,7 +3,11 @@
 @section('title', 'Pets')
 
 @section('content')
-    <div>
+    <div x-data="{
+        init() {
+            console.log('Hello Pets!');
+        }
+    }">
         Hello Pets!
     </div>
 @endsection
