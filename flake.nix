@@ -19,9 +19,6 @@
             inherit system;
           }
         );
-        php = pkgs.php.buildEnv {
-          extensions = { enabled, all }: enabled ++ (with all; [ swoole ]);
-        };
       in
       {
         devShells.default = pkgs.mkShell {

@@ -51,3 +51,7 @@ Dockerfile
 
 # Kubernetes
 kubernetes/
+
+# Nix
+flake.nix
+flake.lock

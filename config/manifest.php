@@ -15,11 +15,11 @@ return [
     |
     */
 
-    'id' => env('APP_ID', Str::slug(env('APP_NAME', 'Laravel'))),
+    'id' => env('APP_ID', Str::slug(env('APP_NAME', 'Pets.net'))),
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Pets.net'),
 
-    'short_name' => env('APP_NAME', 'Laravel'),
+    'short_name' => env('APP_NAME', 'Pets.net'),
 
     'description' => env(
         'APP_DESCRIPTION',
