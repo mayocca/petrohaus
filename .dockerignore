@@ -55,3 +55,7 @@ kubernetes/
 # Nix
 flake.nix
 flake.lock
+
+# Direnv
+.direnv/
+.envrc
