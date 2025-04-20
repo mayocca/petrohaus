@@ -8,7 +8,7 @@ WORKDIR /var/www/html
 
 COPY package.json package-lock.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
@@ -29,6 +29,10 @@ RUN install-php-extensions \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 USER www-data
+
+COPY package.json package-lock.json ./
+
+RUN npm ci
 
 COPY composer.json composer.lock ./
 
