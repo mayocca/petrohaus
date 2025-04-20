@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pets-net
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pets-net
+  template:
+    metadata:
+      labels:
+        app: pets-net
+    spec:
+      containers:
+        - name: pets-net
+          image: pets-net:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 1024Mi
+          envFrom:
+            - configMapRef:
+                name: pets-net-config
+            - secretRef:
+                name: pets-net-secrets
+          # # You can also specify individual environment variables:
+          # env:
+          #   - name: POD_NAME
+          #     valueFrom:
+          #       fieldRef:
+          #         fieldPath: metadata.name
+          #   # Example of individual ConfigMap value
+          #   - name: SPECIFIC_CONFIG
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: pets-net-config
+          #         key: API_URL
+          #   # Example of individual Secret value
+          #   - name: SPECIFIC_SECRET
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: pets-net-secrets
+          #         key: API_KEY
+              

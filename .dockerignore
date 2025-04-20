@@ -48,3 +48,6 @@ Homestead.yaml
 # Docker
 Dockerfile
 .dockerignore
+
+# Kubernetes
+kubernetes/
