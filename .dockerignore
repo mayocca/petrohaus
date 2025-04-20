@@ -46,4 +46,5 @@ Homestead.yaml
 /.styleci.yml
 
 # Docker
-/docker
+Dockerfile
+.dockerignore

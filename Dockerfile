@@ -17,25 +17,13 @@ RUN npm run build
 # Base PHP Image
 FROM ${PHP_BASE_IMAGE} AS php-build
 
-USER root
+COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN apk add --no-cache --virtual .build-deps \
-    autoconf \
-    brotli-dev \
-    g++ \
-    icu-dev \
-    make \
-    libtool \
-    libzip \
-    linux-headers \
-    openssl-dev \
-    && pecl install swoole \
-    && docker-php-ext-enable \
-    swoole \
-    && docker-php-ext-install \
+RUN install-php-extensions \
     intl \
-    zip \
-    && apk del .build-deps
+    pcntl \
+    swoole \
+    zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -51,7 +39,7 @@ RUN composer install \
     --no-scripts \
     --prefer-dist
 
-COPY . .
+COPY --chown=www-data:www-data . .
 
 COPY --from=node-build /var/www/html/public/build ./public/build
 
@@ -59,4 +47,4 @@ RUN composer dump-autoload --optimize
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "octane:start"]
+CMD ["php", "artisan", "octane:start", "--host=0.0.0.0", "--port=8000"]
