@@ -15,15 +15,15 @@ return [
     |
     */
 
-    'id' => env('APP_ID', Str::slug(env('APP_NAME', 'Pets.net'))),
+    'id' => env('APP_ID', Str::slug(env('APP_NAME', 'Petrohaus'))),
 
-    'name' => env('APP_NAME', 'Pets.net'),
+    'name' => env('APP_NAME', 'Petrohaus'),
 
-    'short_name' => env('APP_NAME', 'Pets.net'),
+    'short_name' => env('APP_NAME', 'Petrohaus'),
 
     'description' => env(
         'APP_DESCRIPTION',
-        'Pets.net is a social network for pet owners.',
+        'Petrohaus finds the best deals on petrol and diesel.',
     ),
 
     'start_url' => '/',
