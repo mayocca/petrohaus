@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Manifest\Data;
+namespace App\Modules\Manifest\Messages;
 
 use Illuminate\Contracts\Support\Jsonable;
 

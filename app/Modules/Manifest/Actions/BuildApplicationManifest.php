@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Manifest\Actions;
 
-use App\Modules\Manifest\Data\Manifest;
+use App\Modules\Manifest\Messages\Manifest;
 
 class BuildApplicationManifest
 {
