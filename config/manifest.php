@@ -15,8 +15,6 @@ return [
     |
     */
 
-    'id' => env('APP_ID', Str::slug(env('APP_NAME', 'Petrohaus'))),
-
     'name' => env('APP_NAME', 'Petrohaus'),
 
     'short_name' => env('APP_NAME', 'Petrohaus'),
@@ -32,9 +30,9 @@ return [
 
     'display' => 'minimal-ui',
 
-    'background_color' => '#000000',
+    'background_color' => '#2F6DB6',
 
-    'theme_color' => '#000000',
+    'theme_color' => '#2F6DB6',
 
     'icons' => [
         [
@@ -51,21 +49,6 @@ return [
 
     'categories' => [
         'category' => 'category.png',
-    ],
-
-    'screenshots' => [
-        [
-            'src' => 'icon-512.png',
-            'sizes' => '512x512',
-            'type' => 'image/png',
-            'form_factor' => 'narrow',
-        ],
-        [
-            'src' => 'icon-512.png',
-            'sizes' => '512x512',
-            'type' => 'image/png',
-            'form_factor' => 'wide',
-        ],
     ],
 
     'lang' => env('APP_LOCALE', 'en'),

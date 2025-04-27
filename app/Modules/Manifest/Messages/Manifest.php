@@ -10,7 +10,7 @@ readonly class Manifest implements Jsonable
 {
     public const SCHEMA = 'https://json.schemastore.org/web-manifest-combined.json';
 
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         return json_encode(
             value: array_merge(
