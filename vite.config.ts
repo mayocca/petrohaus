@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ["resources/css/app.css", "resources/ts/app.ts"],
-            refresh: [`resources/views/**/*`],
+            refresh: ["resources/ts/**/*", "resources/views/**/*"],
         }),
         tailwindcss(),
         manifestSRI(),
