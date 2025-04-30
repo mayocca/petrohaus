@@ -12,6 +12,11 @@ export default defineConfig({
         tailwindcss(),
         manifestSRI(),
     ],
+    resolve: {
+        alias: {
+            "@": "/resources/ts",
+        },
+    },
     server: {
         cors: true,
     },

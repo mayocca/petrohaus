@@ -1,8 +1,10 @@
 import { Map, TileLayer, Control } from "leaflet";
+import { defineComponent } from "@/alpine/utils.ts";
 
-export default () => ({
+export default defineComponent(() => ({
+    map: null as Map | null,
     init() {
-        const map = new Map("map", {
+        this.map = new Map(this.$el, {
             center: [-40, -59],
             zoom: 4,
             zoomControl: false,
@@ -12,7 +14,7 @@ export default () => ({
             position: "bottomright",
         });
 
-        map.addControl(zoomControl);
+        this.map?.addControl(zoomControl);
 
         /** @source https://www.ign.gob.ar/AreaServicios/Argenmap/Introduccion */
         const tileLayer = new TileLayer(
@@ -25,6 +27,6 @@ export default () => ({
             }
         );
 
-        map.addLayer(tileLayer);
+        this.map?.addLayer(tileLayer);
     },
-});
+}));
