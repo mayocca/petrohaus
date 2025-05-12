@@ -7,6 +7,7 @@ namespace App\Modules\Dataset\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -22,8 +23,8 @@ class Product extends Model
         'name',
     ];
 
-    public function companies(): BelongsToMany
+    public function companyProducts(): HasMany
     {
-        return $this->belongsToMany(Company::class)->using(CompanyProduct::class);
+        return $this->hasMany(CompanyProduct::class);
     }
 }

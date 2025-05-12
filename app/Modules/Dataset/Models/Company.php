@@ -18,6 +18,8 @@ use Illuminate\Support\Carbon;
  * @property non-empty-string $city
  * @property non-empty-string $province
  * @property non-empty-string|null $region
+ * @property float|null $longitude
+ * @property float|null $latitude
  * @property-read Franchise $franchise
  * @property-read Carbon $created_at
  * @property-read Carbon $updated_at
@@ -33,7 +35,8 @@ class Company extends Model
         'city',
         'province',
         'region',
-        'location',
+        'longitude',
+        'latitude',
     ];
 
     public function franchise(): BelongsTo
@@ -41,8 +44,8 @@ class Company extends Model
         return $this->belongsTo(Franchise::class);
     }
 
-    public function products(): HasMany
+    public function companyProducts(): HasMany
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(CompanyProduct::class);
     }
 }

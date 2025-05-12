@@ -19,8 +19,8 @@ enum ScheduleType: string
     public static function fromDomainId(int $id): self
     {
         return match ($id) {
-            1 => self::Day,
-            2 => self::Night,
+            2 => self::Day,
+            3 => self::Night,
             default => throw new InvalidArgumentException("Invalid schedule type ID: {$id}"),
         };
     }

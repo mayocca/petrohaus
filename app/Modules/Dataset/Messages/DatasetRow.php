@@ -10,7 +10,7 @@ readonly class DatasetRow
 {
     /**
      * @param non-empty-string $timeIndex
-     * @param positive-int $companyId
+     * @param int $companyId
      * @param non-empty-string $cuit
      * @param non-empty-string $companyName
      * @param non-empty-string $address
@@ -25,8 +25,8 @@ readonly class DatasetRow
      * @param DateTimeImmutable $validityDate
      * @param positive-int $franchiseId
      * @param non-empty-string $franchiseName
-     * @param positive-float|null $latitude
-     * @param positive-float|null $longitude
+     * @param float|null $longitude
+     * @param float|null $latitude
      * @param non-empty-string|null $geoJson
      */
     public function __construct(
@@ -46,8 +46,8 @@ readonly class DatasetRow
         public DateTimeImmutable $validityDate,
         public int $franchiseId,
         public string $franchiseName,
-        public ?float $latitude,
         public ?float $longitude,
+        public ?float $latitude,
         public ?string $geoJson,
     ) {}
 }

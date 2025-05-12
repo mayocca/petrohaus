@@ -30,8 +30,8 @@ readonly class TransformCsvRowToMessage
             validityDate: new DateTimeImmutable($data[13]),
             franchiseId: (int) $data[14],
             franchiseName: $data[15],
-            latitude: (float) Str::nonEmptyOrNull($data[16]),
             longitude: (float) Str::nonEmptyOrNull($data[17]),
+            latitude: (float) Str::nonEmptyOrNull($data[16]),
             geoJson: Str::nonEmptyOrNull($data[18]),
         );
     }

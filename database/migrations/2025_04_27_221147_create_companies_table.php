@@ -23,9 +23,14 @@ return new class extends Migration
             $table->string('address');
             $table->string('city');
             $table->string('province');
-            $table->geography('location', subtype: 'point', srid: 4326);
+            $table->string('region')->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
 
             $table->timestamps();
+
+            $table->index('longitude');
+            $table->index('latitude');
         });
     }
 

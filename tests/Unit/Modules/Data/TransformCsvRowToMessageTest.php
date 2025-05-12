@@ -60,8 +60,8 @@ class TransformCsvRowToMessageTest extends TestCase
                 validityDate: new DateTimeImmutable('2017-12-06 11:34:00'),
                 franchiseId: 1,
                 franchiseName: 'BLANCA',
-                latitude: -34.533377,
                 longitude: -58.557665,
+                latitude: -34.533377,
                 geoJson: '{""type"":""Point"",""coordinates"":[-58.557665,-34.533377]}',
             ),
         ];
@@ -104,8 +104,8 @@ class TransformCsvRowToMessageTest extends TestCase
                 validityDate: new DateTimeImmutable('2025-04-01 15:14:00'),
                 franchiseId: 26,
                 franchiseName: 'AXION',
-                latitude: -37.84097,
                 longitude: -58.24857,
+                latitude: -37.84097,
                 geoJson: '{""type"":""Point"",""coordinates"":[-58.24857,-37.84097]}',
             ),
         ];
@@ -149,8 +149,8 @@ class TransformCsvRowToMessageTest extends TestCase
                 validityDate: new DateTimeImmutable('2025-04-07 13:25:00'),
                 franchiseId: 26,
                 franchiseName: 'AXION',
-                latitude: null,
                 longitude: null,
+                latitude: null,
                 geoJson: null,
             ),
         ];

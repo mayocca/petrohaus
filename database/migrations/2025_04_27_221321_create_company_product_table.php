@@ -14,16 +14,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_product', function (Blueprint $table) {
+        Schema::create('company_products', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('company_id')->constrained('companies');
             $table->foreignId('product_id')->constrained('products');
 
             $table->float('price');
-            $table->enum('schedule_type', ScheduleType::values());
+            $table->enum('schedule_type', ['day', 'night']);
+
+            $table->timestamp('validity_date')->nullable();
 
             $table->timestamps();
+
+            $table->unique(['company_id', 'product_id', 'schedule_type']);
         });
     }
 
@@ -32,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('company_product');
+        Schema::dropIfExists('company_products');
     }
 };

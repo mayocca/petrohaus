@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Modules\Dataset\Actions\DetermineDatasetUrl;
 use App\Modules\Dataset\Actions\FetchDatasetStreamIterator;
 use App\Modules\Dataset\Actions\UpsertDatasetEntry;
+use App\Modules\Dataset\Actions\UpsertDatasetRow;
 use App\Modules\Dataset\Messages\DatasetRow;
 use App\Modules\Dataset\Processes\FetchLatestDataset;
 use Illuminate\Console\Command;
@@ -29,7 +30,7 @@ class UpdateDataset extends Command implements Isolatable
     public function handle(
         DetermineDatasetUrl        $determineDatasetUrl,
         FetchDatasetStreamIterator $fetchDatasetStreamIterator,
-        UpsertDatasetEntry         $upsertDatasetEntry,
+        UpsertDatasetRow           $upsertDatasetRow,
     ): void
     {
         $datasetUrl = $determineDatasetUrl->invoke();
@@ -39,13 +40,13 @@ class UpdateDataset extends Command implements Isolatable
         $rows = $fetchDatasetStreamIterator->invoke($datasetUrl);
 
         DB::transaction(
-            callback: function () use ($rows, $upsertDatasetEntry) {
+            callback: function () use ($rows, $upsertDatasetRow) {
                 $this->info('Upserting dataset...');
 
                 $this->withProgressBar(
                     $rows,
-                    function (DatasetRow $datasetRow) use ($upsertDatasetEntry): void {
-                        $upsertDatasetEntry->invoke($datasetRow);
+                    function (DatasetRow $datasetRow) use ($upsertDatasetRow): void {
+                        $upsertDatasetRow->invoke($datasetRow);
                     },
                 );
             },
