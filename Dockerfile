@@ -17,22 +17,20 @@ RUN npm run build
 # Base PHP Image
 FROM ${PHP_BASE_IMAGE} AS php-base
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
 COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN install-php-extensions \
     intl \
     pcntl \
     zip
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 USER www-data
 
 COPY package.json package-lock.json ./
-
-RUN npm ci
 
 COPY composer.json composer.lock ./
 
