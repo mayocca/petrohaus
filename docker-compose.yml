@@ -1,6 +1,7 @@
 services:
     postgres:
-        image: postgres:17
+        image: postgis/postgis:17-3.5-alpine
+        platform: linux/amd64
         environment:
             POSTGRES_USER: "${DB_USER:-petrohaus}"
             POSTGRES_PASSWORD: "${DB_PASSWORD:-petrohaus}"
