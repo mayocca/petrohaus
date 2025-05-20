@@ -32,7 +32,7 @@ class UpdateDataset extends Command implements Isolatable
     ): void {
         $datasetUrl = $determineDatasetUrl->invoke();
 
-        $this->info('Fetching latest dataset from: ' . $datasetUrl);
+        $this->info('Fetching latest dataset from: '.$datasetUrl);
 
         $rows = $fetchDatasetStreamIterator->invoke($datasetUrl);
 

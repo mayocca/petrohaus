@@ -20,7 +20,6 @@ readonly class DatasetRow
      * @param  non-empty-string  $productName
      * @param  positive-int  $scheduleId
      * @param  non-empty-string  $scheduleName
-     * @param  float  $price
      * @param  positive-int  $franchiseId
      * @param  non-empty-string  $franchiseName
      * @param  non-empty-string|null  $geoJson
