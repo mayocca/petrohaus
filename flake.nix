@@ -27,6 +27,10 @@
             php
             php.packages.composer
           ];
+
+          shellHook = ''
+            ./bin/setup-hooks.sh
+          '';
         };
 
         formatter = pkgs.nixfmt-rfc-style;

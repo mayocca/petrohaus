@@ -11,10 +11,9 @@ class Str extends BaseStr
     /**
      * Returns a non-empty string or null.
      *
-     * @param  string|null  $string
      * @return non-empty-string|null
      */
-    public static function nonEmptyOrNull(?string $string): string|null
+    public static function nonEmptyOrNull(?string $string): ?string
     {
         return $string === '' ? null : $string;
     }

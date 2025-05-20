@@ -1,13 +1,12 @@
-name: linter
+name: Linting and Style Checks
 
 on:
   push:
     branches:
-      - develop
       - main
   pull_request:
     branches:
-      - develop
+      - feature/*
       - main
 
 permissions:
@@ -16,31 +15,26 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    environment: Testing
+    strategy:
+      matrix:
+        tool: [pint, phpstan]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-
-      - name: Add Flux Credentials Loaded From ENV
-        run: composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          nix develop --command composer install --prefer-dist --no-progress --no-suggest
           npm install
 
       - name: Run Pint
-        run: vendor/bin/pint
+        if: matrix.tool == 'pint'
+        continue-on-error: true
+        run: nix develop --command vendor/bin/pint --test
 
-      # - name: Commit Changes
-      #   uses: stefanzweifel/git-auto-commit-action@v5
-      #   with:
-      #     commit_message: fix code style
-      #     commit_options: '--no-verify'
-      #     file_pattern: |
-      #       **/*
-      #       !.github/workflows/*
+      - name: Run PHPStan
+        if: matrix.tool == 'phpstan'
+        continue-on-error: true
+        run: nix develop --command vendor/bin/phpstan analyse --memory-limit=-1

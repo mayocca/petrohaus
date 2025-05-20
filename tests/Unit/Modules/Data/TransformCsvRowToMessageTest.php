@@ -14,7 +14,7 @@ use Tests\TestCase;
 class TransformCsvRowToMessageTest extends TestCase
 {
     #[DataProvider('csvRowProvider')]
-    public function testTransformsCsvRowToMessage(array $row, DatasetRow $expected): void
+    public function test_transforms_csv_row_to_message(array $row, DatasetRow $expected): void
     {
         $this->assertEquals($expected, $this->app->make(TransformCsvRowToMessage::class)->invoke($row));
     }

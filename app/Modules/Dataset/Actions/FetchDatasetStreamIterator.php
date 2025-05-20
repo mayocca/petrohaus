@@ -10,22 +10,20 @@ use Illuminate\Support\LazyCollection;
 readonly class FetchDatasetStreamIterator
 {
     public function __construct(
-        private DetermineDatasetUrl      $determineDatasetUrl,
+        private DetermineDatasetUrl $determineDatasetUrl,
         private TransformCsvRowToMessage $transformCsvRowToMessage,
-    ) {
-
-    }
+    ) {}
 
     /**
-     * @param bool $skipHeader
      * @return LazyCollection<int, DatasetRow>
      */
     public function invoke(
+        ?string $url = null,
         bool $skipHeader = true,
     ): LazyCollection {
         /** @var LazyCollection<int, DatasetRow> $lazyCollection */
-        $lazyCollection = LazyCollection::make(function () use ($skipHeader) {
-            $url = $this->determineDatasetUrl->invoke();
+        $lazyCollection = LazyCollection::make(function () use ($url, $skipHeader) {
+            $url ??= $this->determineDatasetUrl->invoke();
 
             Log::info('Fetching latest dataset', [
                 'url' => $url,
@@ -50,5 +48,4 @@ readonly class FetchDatasetStreamIterator
 
         return $lazyCollection;
     }
-
 }
