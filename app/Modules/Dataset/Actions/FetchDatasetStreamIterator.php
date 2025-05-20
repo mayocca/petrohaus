@@ -10,14 +10,11 @@ use Illuminate\Support\LazyCollection;
 readonly class FetchDatasetStreamIterator
 {
     public function __construct(
-        private DetermineDatasetUrl      $determineDatasetUrl,
+        private DetermineDatasetUrl $determineDatasetUrl,
         private TransformCsvRowToMessage $transformCsvRowToMessage,
-    ) {
-
-    }
+    ) {}
 
     /**
-     * @param bool $skipHeader
      * @return LazyCollection<int, DatasetRow>
      */
     public function invoke(
@@ -50,5 +47,4 @@ readonly class FetchDatasetStreamIterator
 
         return $lazyCollection;
     }
-
 }

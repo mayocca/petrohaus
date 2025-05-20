@@ -13,7 +13,7 @@ enum ScheduleType: string
 
     public static function values(): array
     {
-        return array_map(fn(ScheduleType $type) => $type->value, self::cases());
+        return array_map(fn (ScheduleType $type) => $type->value, self::cases());
     }
 
     public static function fromDomainId(int $id): self

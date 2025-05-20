@@ -9,25 +9,21 @@ use DateTimeImmutable;
 readonly class DatasetRow
 {
     /**
-     * @param non-empty-string $timeIndex
-     * @param int $companyId
-     * @param non-empty-string $cuit
-     * @param non-empty-string $companyName
-     * @param non-empty-string $address
-     * @param non-empty-string $city
-     * @param non-empty-string $province
-     * @param non-empty-string|null $region
-     * @param positive-int $productId
-     * @param non-empty-string $productName
-     * @param positive-int $scheduleId
-     * @param non-empty-string $scheduleName
-     * @param positive-float $price
-     * @param DateTimeImmutable $validityDate
-     * @param positive-int $franchiseId
-     * @param non-empty-string $franchiseName
-     * @param float|null $longitude
-     * @param float|null $latitude
-     * @param non-empty-string|null $geoJson
+     * @param  non-empty-string  $timeIndex
+     * @param  non-empty-string  $cuit
+     * @param  non-empty-string  $companyName
+     * @param  non-empty-string  $address
+     * @param  non-empty-string  $city
+     * @param  non-empty-string  $province
+     * @param  non-empty-string|null  $region
+     * @param  positive-int  $productId
+     * @param  non-empty-string  $productName
+     * @param  positive-int  $scheduleId
+     * @param  non-empty-string  $scheduleName
+     * @param  positive-float  $price
+     * @param  positive-int  $franchiseId
+     * @param  non-empty-string  $franchiseName
+     * @param  non-empty-string|null  $geoJson
      */
     public function __construct(
         public string $timeIndex,

@@ -4,10 +4,8 @@ namespace App\Console\Commands;
 
 use App\Modules\Dataset\Actions\DetermineDatasetUrl;
 use App\Modules\Dataset\Actions\FetchDatasetStreamIterator;
-use App\Modules\Dataset\Actions\UpsertDatasetEntry;
 use App\Modules\Dataset\Actions\UpsertDatasetRow;
 use App\Modules\Dataset\Messages\DatasetRow;
-use App\Modules\Dataset\Processes\FetchLatestDataset;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Support\Facades\DB;
@@ -28,14 +26,13 @@ class UpdateDataset extends Command implements Isolatable
      * Execute the console command.
      */
     public function handle(
-        DetermineDatasetUrl        $determineDatasetUrl,
+        DetermineDatasetUrl $determineDatasetUrl,
         FetchDatasetStreamIterator $fetchDatasetStreamIterator,
-        UpsertDatasetRow           $upsertDatasetRow,
-    ): void
-    {
+        UpsertDatasetRow $upsertDatasetRow,
+    ): void {
         $datasetUrl = $determineDatasetUrl->invoke();
 
-        $this->info('Fetching latest dataset from: ' . $datasetUrl);
+        $this->info('Fetching latest dataset from: '.$datasetUrl);
 
         $rows = $fetchDatasetStreamIterator->invoke($datasetUrl);
 
