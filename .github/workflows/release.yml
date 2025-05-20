@@ -33,7 +33,7 @@ jobs:
         run: nix develop --command composer install --prefer-dist --no-progress --no-suggest
 
       - name: Run Laravel tests
-        run: php artisan test
+        run: nix develop --command php artisan test
 
   build:
     runs-on: ubuntu-latest
