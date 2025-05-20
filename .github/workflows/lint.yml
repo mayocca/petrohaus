@@ -3,7 +3,6 @@ name: Linting and Style Checks
 on:
   push:
     branches:
-      - feature/*
       - main
   pull_request:
     branches:
