@@ -1,3 +1,4 @@
+
 ARG PHP_BASE_IMAGE=serversideup/php:8.4-fpm-nginx
 ARG NODE_BASE_IMAGE=node:22-alpine
 
@@ -16,6 +17,10 @@ RUN npm run build
 
 # Base PHP Image
 FROM ${PHP_BASE_IMAGE} AS production
+
+LABEL org.opencontainers.image.source=https://github.com/mayocca/petrohaus
+LABEL org.opencontainers.image.description="Petrohaus is a web application for searching the best gas prices in Argentina"
+LABEL org.opencontainers.image.license=CC-BY-NC-ND-4.0
 
 COPY composer.json composer.lock ./
 
