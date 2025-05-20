@@ -7,6 +7,11 @@ services:
             - 127.0.0.1:8080:8080
         volumes:
             - .:/var/www/html
+        depends_on:
+            - postgres
+            - buggregator
+        networks:
+            - petrohaus
 
     postgres:
         image: postgis/postgis:17-3.5-alpine
@@ -19,6 +24,22 @@ services:
             - 127.0.0.1:5432:5432
         volumes:
             - postgres_data:/var/lib/postgresql/data
+        networks:
+            - petrohaus
 
+    buggregator:
+        image: ghcr.io/buggregator/server:latest
+        pull_policy: always
+        ports:
+            - 127.0.0.1:8000:8000
+            - 127.0.0.1:1025:1025
+            - 127.0.0.1:9912:9912
+            - 127.0.0.1:9913:9913
+        networks:
+            - petrohaus
+
+networks:
+    petrohaus:
+        driver: bridge
 volumes:
     postgres_data:

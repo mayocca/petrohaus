@@ -72,6 +72,20 @@
 -   La app estará disponible en [http://localhost:8080](http://localhost:8080)
 -   La base de datos corre en `localhost:5432` (ver `docker-compose.yml` para credenciales)
 
+#### Ejecutar comandos dentro del contenedor
+
+Para ejecutar comandos dentro del contenedor de la app (por ejemplo, comandos de Artisan, Composer, etc.), puedes usar el script helper:
+
+```sh
+./bin/exec-api.sh <comando>
+```
+
+Por ejemplo, para correr migraciones de Laravel:
+
+```sh
+./bin/exec-api.sh php artisan migrate
+```
+
 ### Git Hooks
 
 -   Al iniciar por primera vez, el entorno Nix ejecuta `bin/setup-hooks.sh` para instalar un pre-commit hook que corre Pint y PHPStan. Esto no es necesario si se usa direnv.
