@@ -16,7 +16,9 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    environment: Testing
+    strategy:
+      matrix:
+        tool: [pint, phpstan]
     steps:
       - uses: actions/checkout@v4
 
@@ -29,4 +31,9 @@ jobs:
           npm install
 
       - name: Run Pint
+        if: matrix.tool == 'pint'
         run: nix develop --command vendor/bin/pint --test
+
+      - name: Run PHPStan
+        if: matrix.tool == 'phpstan'
+        run: nix develop --command vendor/bin/phpstan analyse
