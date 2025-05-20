@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "Running pre-commit hook..."
+
+# Run Pint
+vendor/bin/pint --test
+
+# Run PHPStan
+vendor/bin/phpstan analyse --memory-limit=-1
+
+echo "Pre-commit hook completed."
