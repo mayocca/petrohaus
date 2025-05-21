@@ -23,9 +23,9 @@
 
 ---
 
-## Build
+## Uso
 
-### Con Nix
+### Desarrollo local (Nix)
 
 1. Entra al entorno de desarrollo:
     ```sh
@@ -36,55 +36,26 @@
     ```sh
     cp .env.example .env
     ```
+1. Inicia los contenedores de PostgreSQL y Buggregator:
+    ```sh
+    docker compose up -d
+    ```
 1. Instala las dependencias de PHP y Node:
     ```sh
     composer install
     npm install
     ```
-1. Compila los assets del frontend:
-    ```sh
-    npm run build
-    ```
-
-### Con Docker
-
-1. Construye e inicia los contenedores:
-    ```sh
-    docker compose up --build
-    ```
-    Esto iniciará la app y una base de datos Postgres.
-
----
-
-## Uso
-
-### Desarrollo local (Nix)
-
--   Inicia el servidor de Laravel y el servidor de desarrollo de Vite:
+1. Inicia el servidor de Laravel y el servidor de desarrollo de Vite:
     ```sh
     composer run dev
     ```
     Esto ejecuta PHP, la cola, logs y Vite de forma concurrente.
--   Accede a la app en [http://localhost:8080](http://localhost:8080)
+1. Accede a la app en [http://localhost:8080](http://localhost:8080)
 
 ### Desarrollo local (Docker)
 
 -   La app estará disponible en [http://localhost:8080](http://localhost:8080)
 -   La base de datos corre en `localhost:5432` (ver `docker-compose.yml` para credenciales)
-
-#### Ejecutar comandos dentro del contenedor
-
-Para ejecutar comandos dentro del contenedor de la app (por ejemplo, comandos de Artisan, Composer, etc.), puedes usar el script helper:
-
-```sh
-./bin/exec-api.sh <comando>
-```
-
-Por ejemplo, para correr migraciones de Laravel:
-
-```sh
-./bin/exec-api.sh php artisan migrate
-```
 
 ### Git Hooks
 

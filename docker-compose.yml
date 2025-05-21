@@ -1,18 +1,4 @@
 services:
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        ports:
-            - 127.0.0.1:8080:8080
-        volumes:
-            - .:/var/www/html
-        depends_on:
-            - postgres
-            - buggregator
-        networks:
-            - petrohaus
-
     postgres:
         image: postgis/postgis:17-3.5-alpine
         platform: linux/amd64

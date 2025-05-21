@@ -1,4 +1,3 @@
-
 ARG PHP_BASE_IMAGE=serversideup/php:8.4-fpm-nginx
 ARG NODE_BASE_IMAGE=node:22-alpine
 
