@@ -22,6 +22,8 @@ LABEL org.opencontainers.image.source=https://github.com/mayocca/petrohaus
 LABEL org.opencontainers.image.description="Petrohaus is a web application for searching the best gas prices in Argentina"
 LABEL org.opencontainers.image.license=CC-BY-NC-ND-4.0
 
+ENV AUTORUN_ENABLED=true
+
 COPY composer.json composer.lock ./
 
 RUN composer install \
