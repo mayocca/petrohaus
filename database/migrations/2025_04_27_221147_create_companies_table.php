@@ -24,7 +24,8 @@ return new class extends Migration
             $table->string('city');
             $table->string('province');
             $table->string('region')->nullable();
-            $table->geography('location', subtype: 'POINT', srid: 4326);
+            $table->float('longitude')->nullable();
+            $table->float('latitude')->nullable();
 
             $table->timestamps();
         });
