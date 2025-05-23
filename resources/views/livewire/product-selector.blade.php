@@ -1,16 +1,16 @@
-<div class="w-full max-w-sm mx-auto p-4 bg-white rounded-lg shadow-md border border-gray-100">
+<div class="w-full max-w-sm mx-auto">
     <div class="mb-4">
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">Seleccionar Combustible</h3>
-        <p class="text-sm text-gray-600">Encuentra las mejores ofertas cerca de ti</p>
+        <h3 class="text-lg font-semibold text-white mb-2">Seleccionar Combustible</h3>
+        <p class="text-sm text-white/80">Encuentra las mejores ofertas cerca de ti</p>
     </div>
     
     <div class="space-y-2">
-        <label for="product" class="block text-sm font-medium text-gray-700">
+        <label for="product" class="block text-sm font-medium text-white">
             Tipo de combustible
         </label>
         <select
             id="product"
-            class="select select-bordered w-full bg-white text-gray-800"
+            class="select select-bordered w-full bg-white text-gray-900 focus:border-white"
             wire:model="selectedProduct">
             <option value="" disabled selected>Selecciona un combustible</option>
             @forelse ($products as $product)
@@ -22,10 +22,10 @@
     </div>
     
     @if($selectedProduct)
-    <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+    <div class="mt-4 p-3 bg-white/10 border border-white/20 rounded-btn">
         <div class="flex items-center space-x-2">
-            <div class="w-2 h-2 bg-[#2F6DB6] rounded-full animate-pulse"></div>
-            <span class="text-sm text-[#2F6DB6] font-medium">
+            <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            <span class="text-sm text-white font-medium">
                 Buscando mejores precios...
             </span>
         </div>
