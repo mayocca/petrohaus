@@ -69,7 +69,7 @@ class GasStationController extends Controller
                     // @phpstan-ignore-next-line property.notFound
                     'product_name' => $company->product_name,
                     // @phpstan-ignore-next-line property.notFound
-                    'formatted_price' => '$' . number_format($company->price, 2, ',', '.'),
+                    'formatted_price' => '$'.number_format($company->price, 2, ',', '.'),
                 ];
             }),
             'count' => $companies->count(),
