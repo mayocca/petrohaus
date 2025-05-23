@@ -1,4 +1,4 @@
-name: Linting and Style Checks
+name: Test and Lint
 
 on:
   push:
@@ -12,7 +12,25 @@ permissions:
   contents: write
 
 jobs:
+  unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Install Dependencies
+        run: |
+          nix develop --command composer install --prefer-dist --no-progress --no-suggest
+          npm install
+
+      - name: Run Tests
+        run: nix develop --command vendor/bin/phpunit --testdox --colors=always
+
   quality:
+    name: Linting and Style Checks
     runs-on: ubuntu-latest
     strategy:
       matrix:
