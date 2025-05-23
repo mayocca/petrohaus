@@ -22,6 +22,7 @@ LABEL org.opencontainers.image.description="Petrohaus is a web application for s
 LABEL org.opencontainers.image.license=CC-BY-NC-ND-4.0
 
 ENV AUTORUN_ENABLED=true
+ENV AUTORUN_LARAVEL_MIGRATION_ISOLATION=true
 
 COPY composer.json composer.lock ./
 
