@@ -3,8 +3,7 @@ primary_region = 'eze'
 console_command = 'php /var/www/html/artisan tinker'
 
 [build]
-  dockerfile = 'Dockerfile'
-  # image = "ghcr.io/mayocca/petrohaus:main"
+  image = "ghcr.io/mayocca/petrohaus:main"
 
 [env]
   APP_ENV = 'production'
