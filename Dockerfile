@@ -23,6 +23,7 @@ LABEL org.opencontainers.image.license=CC-BY-NC-ND-4.0
 
 ENV AUTORUN_ENABLED=true
 ENV AUTORUN_LARAVEL_MIGRATION_ISOLATION=true
+ENV PHP_OPCACHE_ENABLE=1
 
 COPY composer.json composer.lock ./
 
