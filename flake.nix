@@ -23,6 +23,7 @@
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            flyctl
             nodejs
             php
             php.packages.composer
