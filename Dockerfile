@@ -1,4 +1,4 @@
-ARG PHP_BASE_IMAGE=serversideup/php:8.4-fpm-nginx
+ARG PHP_BASE_IMAGE=serversideup/php:8.4-unit
 ARG NODE_BASE_IMAGE=node:22-alpine
 
 # Base Node Image
@@ -22,6 +22,8 @@ LABEL org.opencontainers.image.description="Petrohaus is a web application for s
 LABEL org.opencontainers.image.license=CC-BY-NC-ND-4.0
 
 ENV AUTORUN_ENABLED=true
+ENV AUTORUN_LARAVEL_MIGRATION_ISOLATION=true
+ENV PHP_OPCACHE_ENABLE=1
 
 COPY composer.json composer.lock ./
 
