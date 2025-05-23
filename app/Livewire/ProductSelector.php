@@ -22,7 +22,7 @@ class ProductSelector extends Component
     public function render()
     {
         return view('livewire.product-selector', [
-            'products' => Product::all()
+            'products' => Product::all(),
         ]);
     }
 }
