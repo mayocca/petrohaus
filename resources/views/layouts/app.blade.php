@@ -6,7 +6,7 @@
     <body>
         @yield('content')
 
-        @livewireScripts
+        @livewireScriptConfig
         @stack('scripts')
     </body>
 </html>
