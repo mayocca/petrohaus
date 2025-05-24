@@ -20,12 +20,22 @@
           }
         );
 
+        petrohaus-php = pkgs.php.buildEnv {
+          extensions =
+            { enabled, all }:
+            enabled
+            ++ (with all; [
+              pcntl
+              swoole
+            ]);
+        };
+
         petrohaus-shell = pkgs.mkShell {
           buildInputs = with pkgs; [
             flyctl
             nodejs
-            php
-            php.packages.composer
+            petrohaus-php
+            petrohaus-php.packages.composer
           ];
 
           shellHook = ''
