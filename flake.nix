@@ -19,9 +19,8 @@
             inherit system;
           }
         );
-      in
-      {
-        devShells.default = pkgs.mkShell {
+
+        petrohaus-shell = pkgs.mkShell {
           buildInputs = with pkgs; [
             flyctl
             nodejs
@@ -33,7 +32,12 @@
             ./bin/setup-hooks.sh
           '';
         };
+      in
+      {
+        # --* development shells *--
+        devShells.default = petrohaus-shell;
 
+        # --* formatter *--
         formatter = pkgs.nixfmt-rfc-style;
       }
     );
