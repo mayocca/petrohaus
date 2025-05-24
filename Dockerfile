@@ -33,6 +33,9 @@ RUN install-php-extensions \
 # --* install composer *--
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# --* set recommended php.ini *--
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
 USER www-data
 
 # --* install dependencies *--
