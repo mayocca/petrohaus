@@ -25,7 +25,7 @@
 
         "baseUrl": ".",
         "paths": {
-            "@/*": ["resources/ts/*"]
+            "@/*": ["resources/js/*"]
         }
     },
     "include": ["resources/**/*.ts"]

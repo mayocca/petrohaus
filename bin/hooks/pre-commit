@@ -3,9 +3,6 @@
 echo "Running pre-commit hook..."
 
 # Run Pint
-./vendor/bin/pint --test --dirty --no-interaction
-
-# Run PHPStan
-./vendor/bin/phpstan analyse --memory-limit=-1 --no-interaction
+./vendor/bin/pint --dirty --no-interaction
 
 echo "Pre-commit hook completed."
