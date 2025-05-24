@@ -1,4 +1,7 @@
-import { Alpine } from "../../../vendor/livewire/livewire/dist/livewire.esm";
+import {
+    Alpine,
+    Livewire,
+} from "../../../vendor/livewire/livewire/dist/livewire.esm";
 
 window.Alpine = Alpine;
 
@@ -13,3 +16,5 @@ for (const path in data) {
 }
 
 Alpine.start();
+
+Livewire.start();
