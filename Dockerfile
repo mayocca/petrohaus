@@ -1,10 +1,28 @@
 ARG PHP_BASE_IMAGE=php:8.4-cli-alpine
 ARG NODE_BASE_IMAGE=node:22-alpine
+ARG COMPOSER_BASE_IMAGE=composer:latest
+
+FROM ${PHP_BASE_IMAGE} AS php-build
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+COPY composer.json composer.lock ./
+
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --no-scripts \
+    --prefer-dist
+
 
 # Base Node Image
 FROM ${NODE_BASE_IMAGE} AS node-build
 
-WORKDIR /var/www/html
+WORKDIR /app
+
+COPY --from=php-build --chown=www-data:www-data /var/www/html/vendor ./vendor
 
 COPY package.json package-lock.json ./
 
@@ -38,20 +56,14 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 USER www-data
 
-# --* install dependencies *--
-COPY composer.json composer.lock ./
-
-RUN composer install \
-    --no-dev \
-    --no-interaction \
-    --no-scripts \
-    --prefer-dist
+# --* copy vendor from php-build *--
+COPY --from=php-build --chown=www-data:www-data /var/www/html/vendor ./vendor
 
 # --* copy source code *--
 COPY --chown=www-data:www-data . .
 
 # --* copy build assets *--
-COPY --from=node-build --chown=www-data:www-data /var/www/html/public/build ./public/build
+COPY --from=node-build --chown=www-data:www-data /app/public/build ./public/build
 
 # --* set permissions *--
 RUN mkdir -p storage bootstrap/cache
