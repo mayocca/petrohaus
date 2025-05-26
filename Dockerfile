@@ -1,6 +1,5 @@
 ARG PHP_BASE_IMAGE=php:8.4-cli-alpine
 ARG NODE_BASE_IMAGE=node:22-alpine
-ARG COMPOSER_BASE_IMAGE=composer:latest
 
 FROM ${PHP_BASE_IMAGE} AS php-build
 
