@@ -6,7 +6,7 @@ import manifestSRI from "vite-plugin-manifest-sri";
 export default defineConfig({
     plugins: [
         laravel({
-            input: ["resources/css/app.css", "resources/js/app.ts"],
+            input: ["resources/css/app.css", "resources/js/app.tsx"],
             refresh: ["resources/js/**/*", "resources/views/**/*"],
         }),
         tailwindcss(),

@@ -36,9 +36,7 @@
 
 @import 'leaflet/dist/leaflet.css';
 
-[x-cloak] {
-    display: none !important;
-}
+/* Alpine.js x-cloak styles removed - migrated to React */
 
 /* Petrohaus Themed Select Component */
 .select-petrohaus {

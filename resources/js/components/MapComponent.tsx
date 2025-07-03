@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
     Map,
     TileLayer,
@@ -6,33 +7,25 @@ import {
     Marker,
     DivIcon,
 } from "leaflet";
-import { defineComponent } from "../utils.ts";
+import type { GasStation } from "../types";
 
-interface GasStation {
-    id: number;
-    name: string;
-    franchise_name: string;
-    address: string;
-    city: string;
-    province: string;
-    latitude: number;
-    longitude: number;
-    price: number;
-    validity_date: string;
-    product_name: string;
-    formatted_price: string;
-}
+// Import Leaflet CSS
+import "leaflet/dist/leaflet.css";
 
-export default defineComponent(() => ({
-    map: null as Map | null,
-    userMarker: null as CircleMarker | null,
-    gasStationMarkers: [] as Marker[],
-    selectedProduct: null as number | null,
-    searchButton: null as Control | null,
-    isSearching: false,
+export default function MapComponent() {
+    const mapRef = useRef<HTMLDivElement>(null);
+    const [map, setMap] = useState<Map | null>(null);
+    const [userMarker, setUserMarker] = useState<CircleMarker | null>(null);
+    const [gasStationMarkers, setGasStationMarkers] = useState<Marker[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
+    const [searchButton, setSearchButton] = useState<Control | null>(null);
+    const [isSearching, setIsSearching] = useState(false);
 
-    init() {
-        this.map = new Map(this.$el, {
+    // Initialize map
+    useEffect(() => {
+        if (!mapRef.current) return;
+
+        const mapInstance = new Map(mapRef.current, {
             center: [-40, -59],
             zoom: 4,
             zoomControl: false,
@@ -42,9 +35,9 @@ export default defineComponent(() => ({
             position: "bottomright",
         });
 
-        this.map?.addControl(zoomControl);
+        mapInstance.addControl(zoomControl);
 
-        /** @source https://www.ign.gob.ar/AreaServicios/Argenmap/Introduccion */
+        // @source https://www.ign.gob.ar/AreaServicios/Argenmap/Introduccion
         const tileLayer = new TileLayer(
             "https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png",
             {
@@ -55,36 +48,58 @@ export default defineComponent(() => ({
             }
         );
 
-        this.map?.addLayer(tileLayer);
+        mapInstance.addLayer(tileLayer);
 
         // Set up location event handlers
-        this.setupLocationHandlers();
+        setupLocationHandlers(mapInstance);
 
         // Set up map event handlers
-        this.setupMapEventHandlers();
-
-        // Set up Livewire event listeners
-        this.setupLivewireEventListeners();
+        setupMapEventHandlers(mapInstance);
 
         // Request location permissions and start tracking
-        this.requestLocationPermission();
-    },
+        requestLocationPermission(mapInstance);
 
-    setupLocationHandlers() {
-        if (!this.map) return;
+        setMap(mapInstance);
 
+        return () => {
+            mapInstance.remove();
+        };
+    }, []);
+
+    // Listen for product selection events
+    useEffect(() => {
+        const handleProductSelected = (event: CustomEvent) => {
+            const productId = event.detail ? parseInt(event.detail) : null;
+            setSelectedProduct(productId);
+            onProductSelected(productId);
+        };
+
+        window.addEventListener(
+            "productSelected",
+            handleProductSelected as EventListener
+        );
+
+        return () => {
+            window.removeEventListener(
+                "productSelected",
+                handleProductSelected as EventListener
+            );
+        };
+    }, [map]);
+
+    const setupLocationHandlers = (mapInstance: Map) => {
         // Handle successful location finding
-        this.map.on("locationfound", (e: any) => {
+        mapInstance.on("locationfound", (e: any) => {
             const radius = e.accuracy / 2;
             const latlng = e.latlng;
 
             // Remove existing marker if any
-            if (this.userMarker && this.map) {
-                this.map.removeLayer(this.userMarker as any);
+            if (userMarker) {
+                mapInstance.removeLayer(userMarker);
             }
 
             // Create user location marker (blue dot)
-            this.userMarker = new CircleMarker(latlng, {
+            const newUserMarker = new CircleMarker(latlng, {
                 color: "#fff",
                 fillColor: "#2F6DB6",
                 fillOpacity: 1,
@@ -92,14 +107,12 @@ export default defineComponent(() => ({
                 radius: 8,
             }).bindPopup(`Estás a ${Math.round(radius)} metros de este punto`);
 
-            // Add to map
-            if (this.map) {
-                this.map.addLayer(this.userMarker as any);
-            }
+            mapInstance.addLayer(newUserMarker);
+            setUserMarker(newUserMarker);
         });
 
         // Handle location errors
-        this.map.on("locationerror", (e: any) => {
+        mapInstance.on("locationerror", (e: any) => {
             let message = "Error al acceder a la ubicación.";
 
             if (e.message) {
@@ -115,44 +128,34 @@ export default defineComponent(() => ({
 
             console.warn("Error de ubicación:", message);
         });
-    },
+    };
 
-    setupMapEventHandlers() {
-        if (!this.map) return;
-
+    const setupMapEventHandlers = (mapInstance: Map) => {
         // Show search button when map is moved and product is selected
-        this.map.on("moveend", () => {
-            if (this.selectedProduct && !this.isSearching) {
-                this.showSearchButton();
+        mapInstance.on("moveend", () => {
+            if (selectedProduct && !isSearching) {
+                showSearchButton(mapInstance);
             }
         });
-    },
+    };
 
-    setupLivewireEventListeners() {
-        // Listen for product selection from Livewire component
-        window.addEventListener("productSelected", (event: any) => {
-            this.selectedProduct = event.detail ? parseInt(event.detail) : null;
-            this.onProductSelected();
-        });
-    },
-
-    onProductSelected() {
-        if (this.selectedProduct && this.map) {
-            this.searchGasStations();
+    const onProductSelected = (productId: number | null) => {
+        if (productId && map) {
+            searchGasStations();
         } else {
-            this.clearGasStationMarkers();
-            this.hideSearchButton();
+            clearGasStationMarkers();
+            hideSearchButton();
         }
-    },
+    };
 
-    async searchGasStations() {
-        if (!this.map || !this.selectedProduct) return;
+    const searchGasStations = async () => {
+        if (!map || !selectedProduct) return;
 
-        this.isSearching = true;
-        this.hideSearchButton();
+        setIsSearching(true);
+        hideSearchButton();
 
         try {
-            const bounds = this.map.getBounds();
+            const bounds = map.getBounds();
 
             const response = await fetch("/api/gas-stations/search", {
                 method: "POST",
@@ -165,7 +168,7 @@ export default defineComponent(() => ({
                             ?.getAttribute("content") || "",
                 },
                 body: JSON.stringify({
-                    product_id: this.selectedProduct,
+                    product_id: selectedProduct,
                     bounds: {
                         north: bounds.getNorth(),
                         south: bounds.getSouth(),
@@ -182,19 +185,21 @@ export default defineComponent(() => ({
             const data = await response.json();
 
             if (data.success) {
-                this.displayGasStations(data.data);
+                displayGasStations(data.data);
             }
         } catch (error) {
             console.error("Error searching gas stations:", error);
         } finally {
-            this.isSearching = false;
+            setIsSearching(false);
         }
-    },
+    };
 
-    displayGasStations(gasStations: GasStation[]) {
-        this.clearGasStationMarkers();
+    const displayGasStations = (gasStations: GasStation[]) => {
+        clearGasStationMarkers();
 
-        if (!this.map) return;
+        if (!map) return;
+
+        const newMarkers: Marker[] = [];
 
         gasStations.forEach((station, index) => {
             const icon = new DivIcon({
@@ -253,22 +258,24 @@ export default defineComponent(() => ({
                 </div>
             `);
 
-            this.gasStationMarkers.push(marker);
-            this.map?.addLayer(marker as any);
+            newMarkers.push(marker);
+            map.addLayer(marker);
         });
-    },
 
-    clearGasStationMarkers() {
-        this.gasStationMarkers.forEach((marker) => {
-            if (this.map) {
-                this.map.removeLayer(marker as any);
+        setGasStationMarkers(newMarkers);
+    };
+
+    const clearGasStationMarkers = () => {
+        gasStationMarkers.forEach((marker) => {
+            if (map) {
+                map.removeLayer(marker);
             }
         });
-        this.gasStationMarkers = [];
-    },
+        setGasStationMarkers([]);
+    };
 
-    showSearchButton() {
-        if (this.searchButton || !this.map) return;
+    const showSearchButton = (mapInstance: Map) => {
+        if (searchButton || !mapInstance) return;
 
         const SearchControl = Control.extend({
             onAdd: () => {
@@ -292,29 +299,28 @@ export default defineComponent(() => ({
                 `;
 
                 div.addEventListener("click", () => {
-                    this.searchGasStations();
+                    searchGasStations();
                 });
 
                 return div;
             },
         });
 
-        this.searchButton = new SearchControl({ position: "topright" });
-        this.map.addControl(this.searchButton);
-    },
+        const newSearchButton = new SearchControl({ position: "topright" });
+        mapInstance.addControl(newSearchButton);
+        setSearchButton(newSearchButton);
+    };
 
-    hideSearchButton() {
-        if (this.searchButton && this.map) {
-            this.map.removeControl(this.searchButton);
-            this.searchButton = null;
+    const hideSearchButton = () => {
+        if (searchButton && map) {
+            map.removeControl(searchButton);
+            setSearchButton(null);
         }
-    },
+    };
 
-    requestLocationPermission() {
-        if (!this.map) return;
-
+    const requestLocationPermission = (mapInstance: Map) => {
         // Use Leaflet's native locate method
-        this.map.locate({
+        mapInstance.locate({
             setView: true,
             maxZoom: 16,
             watch: true,
@@ -322,33 +328,7 @@ export default defineComponent(() => ({
             timeout: 10000,
             maximumAge: 60000,
         });
-    },
+    };
 
-    destroy() {
-        if (!this.map) return;
-
-        // Stop location watching
-        this.map.stopLocate();
-
-        // Remove location marker
-        if (this.userMarker) {
-            this.map.removeLayer(this.userMarker as any);
-            this.userMarker = null;
-        }
-
-        // Clear gas station markers
-        this.clearGasStationMarkers();
-
-        // Remove search button
-        this.hideSearchButton();
-
-        // Remove event listeners
-        this.map.off("locationfound");
-        this.map.off("locationerror");
-        this.map.off("moveend");
-
-        // Clean up map
-        this.map.remove();
-        this.map = null;
-    },
-}));
+    return <div ref={mapRef} style={{ width: "100%", height: "100vh" }} />;
+}

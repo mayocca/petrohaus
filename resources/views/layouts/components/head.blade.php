@@ -9,6 +9,6 @@
 
 {!! \Sentry\Laravel\Integration::sentryMeta() !!}
 
-@vite(['resources/css/app.css', 'resources/js/app.ts'])
+@vite(['resources/css/app.css', 'resources/js/app.tsx'])
 
-@livewireStyles
+@inertiaHead

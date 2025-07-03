@@ -10,6 +10,7 @@
         "noEmit": true,
         "sourceMap": true,
         "isolatedModules": true,
+        "jsx": "react-jsx",
 
         // Best practices
         "strict": true,
@@ -28,5 +29,10 @@
             "@/*": ["resources/js/*"]
         }
     },
-    "include": ["resources/**/*.ts"]
+    "include": [
+        "resources/**/*.ts",
+        "resources/**/*.tsx",
+        "resources/**/*.js",
+        "resources/**/*.jsx"
+    ]
 }
