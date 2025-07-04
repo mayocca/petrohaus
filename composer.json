@@ -11,7 +11,8 @@
         "laravel/framework": "^12.0",
         "laravel/octane": "^2.9",
         "laravel/tinker": "^2.10.1",
-        "sentry/sentry-laravel": "^4.13"
+        "sentry/sentry-laravel": "^4.13",
+        "spatie/laravel-query-builder": "^6.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",

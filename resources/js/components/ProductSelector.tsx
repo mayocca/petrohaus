@@ -1,28 +1,12 @@
-import { useState } from "react";
 import type { Product } from "../types";
+import { useMapActions } from "../hooks/useMapActions";
 
 interface ProductSelectorProps {
     products: Product[];
-    onProductSelected?: (productId: number | null) => void;
 }
 
-export default function ProductSelector({
-    products,
-    onProductSelected,
-}: ProductSelectorProps) {
-    const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
-
-    const handleProductChange = (productId: number | null) => {
-        setSelectedProduct(productId);
-        onProductSelected?.(productId);
-
-        // Dispatch custom event for map component
-        window.dispatchEvent(
-            new CustomEvent("productSelected", {
-                detail: productId,
-            })
-        );
-    };
+export default function ProductSelector({ products }: ProductSelectorProps) {
+    const { selectedProduct, selectProduct } = useMapActions();
 
     return (
         <div className="w-full max-w-sm mx-auto">
@@ -47,7 +31,7 @@ export default function ProductSelector({
                     className="select select-bordered w-full bg-white text-gray-900 focus:border-white"
                     value={selectedProduct || ""}
                     onChange={(e) =>
-                        handleProductChange(
+                        selectProduct(
                             e.target.value ? parseInt(e.target.value) : null
                         )
                     }

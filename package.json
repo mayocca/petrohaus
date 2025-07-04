@@ -23,6 +23,7 @@
     "dependencies": {
         "@inertiajs/react": "^2.0.14",
         "@types/react": "^19.1.8",
-        "react": "^19.1.0"
+        "react": "^19.1.0",
+        "react-leaflet": "^5.0.0"
     }
 }
