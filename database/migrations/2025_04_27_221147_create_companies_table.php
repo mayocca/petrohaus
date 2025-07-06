@@ -24,8 +24,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('province');
             $table->string('region')->nullable();
-            $table->float('longitude')->nullable();
-            $table->float('latitude')->nullable();
+            $table->magellanPoint('location')->nullable();
 
             $table->timestamps();
         });

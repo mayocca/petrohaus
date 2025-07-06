@@ -4,7 +4,6 @@ namespace App\Modules\Dataset\Actions;
 
 use App\Modules\Dataset\Messages\DatasetRow;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\LazyCollection;
 
 readonly class FetchDatasetStreamIterator
@@ -24,10 +23,6 @@ readonly class FetchDatasetStreamIterator
         /** @var LazyCollection<int, DatasetRow> $lazyCollection */
         $lazyCollection = LazyCollection::make(function () use ($url, $skipHeader) {
             $url ??= $this->determineDatasetUrl->invoke();
-
-            Log::info('Fetching latest dataset', [
-                'url' => $url,
-            ]);
 
             $handle = fopen($url, 'r');
 

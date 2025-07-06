@@ -10,11 +10,32 @@ use App\Modules\Dataset\Models\Company;
 use App\Modules\Dataset\Models\CompanyProduct;
 use App\Modules\Dataset\Models\Franchise;
 use App\Modules\Dataset\Models\Product;
+use Clickbar\Magellan\Data\Geometries\Point;
+use Illuminate\Support\Facades\Log;
 
 readonly class UpsertDatasetRow
 {
     public function invoke(DatasetRow $datasetRow): void
     {
+        $newestEntry = CompanyProduct::query()
+            ->where('company_id', $datasetRow->companyId)
+            ->where('product_id', $datasetRow->productId)
+            ->where('schedule_type', ScheduleType::fromDomainId($datasetRow->scheduleId))
+            ->latest('validity_date')
+            ->first();
+
+        if ($newestEntry && $newestEntry->validity_date >= $datasetRow->validityDate) {
+            Log::info('Skipping upsert for dataset row', [
+                'company_id' => $datasetRow->companyId,
+                'product_id' => $datasetRow->productId,
+                'schedule_type' => ScheduleType::fromDomainId($datasetRow->scheduleId),
+                'validity_date' => $datasetRow->validityDate,
+                'existing_validity_date' => $newestEntry->validity_date,
+            ]);
+
+            return;
+        }
+
         Franchise::query()
             ->upsert(
                 values: [
@@ -36,11 +57,13 @@ readonly class UpsertDatasetRow
                     'city' => $datasetRow->city,
                     'province' => $datasetRow->province,
                     'region' => $datasetRow->region,
-                    'longitude' => $datasetRow->longitude,
-                    'latitude' => $datasetRow->latitude,
+                    'location' => Point::makeGeodetic(
+                        latitude: $datasetRow->latitude,
+                        longitude: $datasetRow->longitude,
+                    ),
                 ],
                 uniqueBy: ['id'],
-                update: ['franchise_id', 'cuit', 'name', 'address', 'city', 'province', 'region', 'longitude', 'latitude'],
+                update: ['franchise_id', 'cuit', 'name', 'address', 'city', 'province', 'region', 'location'],
             );
 
         Product::query()
@@ -58,12 +81,19 @@ readonly class UpsertDatasetRow
                 values: [
                     'company_id' => $datasetRow->companyId,
                     'product_id' => $datasetRow->productId,
-                    'schedule_type' => ScheduleType::fromDomainId($datasetRow->scheduleId),
+                    'schedule_type' => $scheduleType = ScheduleType::fromDomainId($datasetRow->scheduleId),
                     'price' => $datasetRow->price,
                     'validity_date' => $datasetRow->validityDate,
                 ],
                 uniqueBy: ['company_id', 'product_id', 'schedule_type'],
                 update: ['price', 'validity_date'],
             );
+
+        if ($scheduleType === ScheduleType::Unknown) {
+            Log::warning('Unknown schedule type', [
+                'schedule_type' => $scheduleType,
+                'schedule_id' => $datasetRow->scheduleId,
+            ]);
+        }
     }
 }

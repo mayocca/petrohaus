@@ -3,6 +3,13 @@ export interface Product {
     name: string;
 }
 
+export interface ProductPrice {
+    product_name: string;
+    day_price: string | null;
+    night_price: string | null;
+    validity_date: string;
+}
+
 export interface GasStation {
     id: number;
     name: string;
@@ -16,6 +23,8 @@ export interface GasStation {
     validity_date: string;
     product_name: string;
     formatted_price: string;
+    schedule_type: string;
+    prices: ProductPrice[];
 }
 
 export interface SearchBounds {
@@ -23,4 +32,14 @@ export interface SearchBounds {
     south: number;
     east: number;
     west: number;
+}
+
+export interface Filters {
+    filter?: {
+        product?: string;
+        company?: string;
+        franchise?: string;
+        city?: string;
+        province?: string;
+    };
 }

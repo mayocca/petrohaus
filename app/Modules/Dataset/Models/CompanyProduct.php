@@ -40,6 +40,7 @@ class CompanyProduct extends Model
     {
         return [
             'schedule_type' => ScheduleType::class,
+            'validity_date' => 'datetime',
         ];
     }
 

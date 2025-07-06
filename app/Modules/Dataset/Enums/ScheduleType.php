@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Dataset\Enums;
 
-use InvalidArgumentException;
-
 enum ScheduleType: string
 {
     case Day = 'day';
     case Night = 'night';
+    case Unknown = 'unknown';
 
     public static function values(): array
     {
@@ -21,7 +20,7 @@ enum ScheduleType: string
         return match ($id) {
             2 => self::Day,
             3 => self::Night,
-            default => throw new InvalidArgumentException("Invalid schedule type ID: {$id}"),
+            default => self::Unknown,
         };
     }
 }

@@ -1,40 +1,118 @@
-import { Head, usePage } from "@inertiajs/react";
-import BackgroundMap from "../components/Map/BackgroundMap";
-import ProductSelector from "../components/ProductSelector";
-import type { Product } from "../types";
-import MapLayout from "./MapLayout";
-import { useMapActions } from "@/hooks/useMapActions";
+import React, { useState, useCallback } from "react";
+import { Head, router, usePage } from "@inertiajs/react";
+import SimpleMap from "../components/SimpleMap";
+import ProductPopup from "../components/ProductPopup";
+import CompanyList from "../components/CompanyList";
+import type { Product, GasStation } from "../types";
 
 interface IndexProps {
     products: Product[];
-    filters: Record<string, string>;
+    gasStations: GasStation[];
 }
 
-const Index = ({ products }: IndexProps) => {
-    const page = usePage();
-    const queryParams = new URLSearchParams(page.url.split("?")[1]);
-    const filters = Object.fromEntries(queryParams.entries());
-    const { selectProduct } = useMapActions();
-    selectProduct(Number(filters["filter[product]"]));
+export default function Index({ products, gasStations }: IndexProps) {
+    const { url } = usePage();
+    const urlParams = new URLSearchParams(url.split("?")[1] || "");
+    const productFilter = urlParams.get("filter[product]");
+
+    const [selectedProduct, setSelectedProduct] = useState<number | null>(
+        productFilter ? parseInt(productFilter) : null
+    );
+    const [showResults, setShowResults] = useState(gasStations.length > 0);
+
+    const handleProductSelect = useCallback((productId: number | null) => {
+        setSelectedProduct(productId);
+
+        if (productId) {
+            // Use Inertia router to update URL with filter
+            router.get(
+                "/",
+                {
+                    filter: {
+                        product: productId.toString(),
+                    },
+                },
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    only: ["gasStations"],
+                }
+            );
+        } else {
+            // Clear filters
+            router.get(
+                "/",
+                {},
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    only: ["gasStations"],
+                }
+            );
+            setShowResults(false);
+        }
+    }, []);
+
+    const handleSearch = useCallback(() => {
+        if (!selectedProduct) return;
+
+        // Trigger a fresh search with current filters
+        router.get(
+            "/",
+            {
+                filter: {
+                    product: selectedProduct.toString(),
+                },
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                only: ["gasStations"],
+            }
+        );
+
+        setShowResults(true);
+    }, [selectedProduct]);
+
+    const handleCloseResults = useCallback(() => {
+        setShowResults(false);
+    }, []);
+
+    // Update show results when gasStations change
+    React.useEffect(() => {
+        setShowResults(gasStations.length > 0);
+    }, [gasStations]);
+
+    // Update selected product when URL changes
+    React.useEffect(() => {
+        const currentProductFilter = urlParams.get("filter[product]");
+        const currentProduct = currentProductFilter
+            ? parseInt(currentProductFilter)
+            : null;
+        setSelectedProduct(currentProduct);
+    }, [url]);
+
     return (
         <>
             <Head title="Petrohaus - Encuentra los mejores precios de combustible" />
 
-            <div className="flex flex-col md:flex-row w-full h-full">
-                <div
-                    className="w-full md:w-1/4 z-10 p-4 md:p-6 shadow md:shadow-lg"
-                    style={{ backgroundColor: "#2F6DB6" }}
-                >
-                    <ProductSelector products={products} />
-                </div>
-                <div className="flex-1 relative">
-                    <BackgroundMap />
-                </div>
+            <div className="relative w-full h-screen">
+                <SimpleMap gasStations={gasStations} />
+
+                <ProductPopup
+                    products={products}
+                    selectedProduct={selectedProduct}
+                    onProductSelect={handleProductSelect}
+                    onSearch={handleSearch}
+                    isSearching={false}
+                />
+
+                <CompanyList
+                    gasStations={gasStations}
+                    isVisible={showResults}
+                    onClose={handleCloseResults}
+                />
             </div>
         </>
     );
-};
-
-Index.layout = (page: React.ReactNode) => <MapLayout children={page} />;
-
-export default Index;
+}

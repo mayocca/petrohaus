@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Modules\Dataset\Actions\DetermineDatasetUrl;
@@ -9,6 +11,8 @@ use App\Modules\Dataset\Messages\DatasetRow;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class UpdateDataset extends Command implements Isolatable
 {
@@ -36,18 +40,26 @@ class UpdateDataset extends Command implements Isolatable
 
         $rows = $fetchDatasetStreamIterator->invoke($datasetUrl);
 
-        DB::transaction(
-            callback: function () use ($rows, $upsertDatasetRow) {
-                $this->info('Upserting dataset...');
+        try {
+            DB::transaction(
+                callback: function () use ($rows, $upsertDatasetRow) {
+                    $this->info('Upserting dataset...');
 
-                $this->withProgressBar(
-                    $rows,
-                    function (DatasetRow $datasetRow) use ($upsertDatasetRow): void {
-                        $upsertDatasetRow->invoke($datasetRow);
-                    },
-                );
-            },
-            attempts: 3,
-        );
+                    $this->withProgressBar(
+                        $rows,
+                        function (DatasetRow $datasetRow) use ($upsertDatasetRow): void {
+                            $upsertDatasetRow->invoke($datasetRow);
+                        },
+                    );
+                },
+                attempts: 3,
+            );
+        } catch (Throwable $e) {
+            Log::error('Failed to update dataset', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            $this->error('Failed to update dataset: '.$e->getMessage());
+        }
     }
 }
