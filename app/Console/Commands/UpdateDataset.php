@@ -45,12 +45,20 @@ class UpdateDataset extends Command implements Isolatable
                 callback: function () use ($rows, $upsertDatasetRow) {
                     $this->info('Upserting dataset...');
 
+                    $upserted = 0;
+
                     $this->withProgressBar(
                         $rows,
-                        function (DatasetRow $datasetRow) use ($upsertDatasetRow): void {
-                            $upsertDatasetRow->invoke($datasetRow);
+                        function (DatasetRow $datasetRow) use ($upsertDatasetRow, &$upserted): void {
+                            $result = $upsertDatasetRow->invoke($datasetRow);
+
+                            if ($result) {
+                                $upserted++;
+                            }
                         },
                     );
+
+                    $this->info('Upserted '.$upserted.' row(s)');
                 },
                 attempts: 3,
             );

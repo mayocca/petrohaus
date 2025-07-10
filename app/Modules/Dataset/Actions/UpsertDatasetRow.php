@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 readonly class UpsertDatasetRow
 {
-    public function invoke(DatasetRow $datasetRow): void
+    public function invoke(DatasetRow $datasetRow): bool
     {
         $newestEntry = CompanyProduct::query()
             ->where('company_id', $datasetRow->companyId)
@@ -25,15 +25,8 @@ readonly class UpsertDatasetRow
             ->first();
 
         if ($newestEntry && $newestEntry->validity_date >= $datasetRow->validityDate) {
-            Log::info('Skipping upsert for dataset row', [
-                'company_id' => $datasetRow->companyId,
-                'product_id' => $datasetRow->productId,
-                'schedule_type' => ScheduleType::fromDomainId($datasetRow->scheduleId),
-                'validity_date' => $datasetRow->validityDate,
-                'existing_validity_date' => $newestEntry->validity_date,
-            ]);
-
-            return;
+            // Skip upsert for this row because it's older than the newest entry
+            return false;
         }
 
         Franchise::query()
@@ -95,5 +88,7 @@ readonly class UpsertDatasetRow
                 'schedule_id' => $datasetRow->scheduleId,
             ]);
         }
+
+        return true;
     }
 }

@@ -25,6 +25,10 @@ export interface GasStation {
     formatted_price: string;
     schedule_type: string;
     prices: ProductPrice[];
+    location: {
+        type: string;
+        coordinates: [number, number];
+    };
 }
 
 export interface SearchBounds {

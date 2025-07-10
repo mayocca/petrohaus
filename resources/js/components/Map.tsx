@@ -1,4 +1,3 @@
-import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { divIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -35,7 +34,7 @@ function createGasStationIcon(index: number) {
     });
 }
 
-export default function SimpleMap({ gasStations }: SimpleMapProps) {
+export default function Map({ gasStations }: SimpleMapProps) {
     return (
         <MapContainer
             center={[-40, -59]}
@@ -54,7 +53,10 @@ export default function SimpleMap({ gasStations }: SimpleMapProps) {
             {gasStations.map((station, index) => (
                 <Marker
                     key={`${station.id}-${index}`}
-                    position={[station.latitude, station.longitude]}
+                    position={[
+                        station.location.coordinates[1],
+                        station.location.coordinates[0],
+                    ]}
                     icon={createGasStationIcon(index)}
                 >
                     <Popup>
@@ -88,7 +90,7 @@ export default function SimpleMap({ gasStations }: SimpleMapProps) {
                             </p>
 
                             {/* Show day/night prices in popup */}
-                            <div className="space-y-2">
+                            {/* <div className="space-y-2">
                                 {station.prices.map(
                                     (productPrice, priceIndex) => (
                                         <div
@@ -159,7 +161,7 @@ export default function SimpleMap({ gasStations }: SimpleMapProps) {
                                         </div>
                                     )
                                 )}
-                            </div>
+                            </div> */}
                         </div>
                     </Popup>
                 </Marker>

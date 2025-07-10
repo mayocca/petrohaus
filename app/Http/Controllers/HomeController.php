@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Modules\Dataset\Models\Company;
-use Clickbar\Magellan\Data\Boxes\Box2D;
-use Clickbar\Magellan\Database\PostgisFunctions\ST;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request): Response|JsonResponse
     {
         $data = $request->validate([
             'franchise_id' => ['sometimes', 'required', 'exists:franchises,id'],
@@ -40,28 +39,23 @@ class HomeController extends Controller
                     ]);
             })
             ->when(isset($data['coordinates']), function (Builder $builder) use ($data) {
-                $builder->whereHas('location', function (Builder $query) use ($data) {
-                    // Filter companies that are within the bounding box of the provided coordinates
-                    $box = Box2D::make(
-                        xMin: min($data['coordinates'][0]['longitude'], $data['coordinates'][1]['longitude']),
-                        yMin: min($data['coordinates'][0]['latitude'], $data['coordinates'][1]['latitude']),
-                        xMax: max($data['coordinates'][0]['longitude'], $data['coordinates'][1]['longitude']),
-                        yMax: max($data['coordinates'][0]['latitude'], $data['coordinates'][1]['latitude']),
-                    );
+                $minLon = min(floatval($data['coordinates'][0]['longitude']), floatval($data['coordinates'][1]['longitude']));
+                $minLat = min(floatval($data['coordinates'][0]['latitude']), floatval($data['coordinates'][1]['latitude']));
+                $maxLon = max(floatval($data['coordinates'][0]['longitude']), floatval($data['coordinates'][1]['longitude']));
+                $maxLat = max(floatval($data['coordinates'][0]['latitude']), floatval($data['coordinates'][1]['latitude']));
 
-                    $query->where(ST::intersects('location', $box));
-                });
+                $builder->whereRaw('location && ST_MakeEnvelope(?, ?, ?, ?)', [
+                    $minLon,
+                    $minLat,
+                    $maxLon,
+                    $maxLat,
+                ]);
             })
             ->limit(10)
             ->get();
 
-        // debug($companies->jsonSerialize());
-        // return response()->json($data);
-        // return response()->json($companies);
-        debug($companies->jsonSerialize());
-
-        return Inertia::render('Home', [
-            'companies' => $companies,
+        return Inertia::render('Index', [
+            'gasStations' => $companies,
         ]);
     }
 }
