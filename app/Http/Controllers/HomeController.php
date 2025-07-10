@@ -6,14 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Modules\Dataset\Models\Company;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function index(Request $request): Response|JsonResponse
+    public function index(Request $request): Response
     {
         $data = $request->validate([
             'franchise_id' => ['sometimes', 'required', 'exists:franchises,id'],
