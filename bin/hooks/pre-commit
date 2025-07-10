@@ -2,7 +2,10 @@
 
 echo "Running pre-commit hook..."
 
+# Get staged PHP files
+staged_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.php$')
+
 # Run Pint
-./vendor/bin/pint --dirty --no-interaction
+./vendor/bin/pint --dirty --no-interaction $staged_files && git add $staged_files
 
 echo "Pre-commit hook completed."
