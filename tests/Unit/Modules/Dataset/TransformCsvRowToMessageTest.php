@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Modules\Data;
+namespace Tests\Unit\Modules\Dataset;
 
 use App\Modules\Dataset\Actions\TransformCsvRowToMessage;
 use App\Modules\Dataset\Messages\DatasetRow;

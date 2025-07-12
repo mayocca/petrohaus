@@ -19,8 +19,6 @@
 
 <title>@yield('title')</title>
 
-{!! \Sentry\Laravel\Integration::sentryMeta() !!}
-
 @vite(['resources/css/app.css', 'resources/js/app.tsx'])
 
 @inertiaHead
