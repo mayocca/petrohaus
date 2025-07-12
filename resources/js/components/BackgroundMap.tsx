@@ -128,7 +128,7 @@ export default function BackgroundMap({
             center={defaultCenter}
             zoom={defaultZoom}
             zoomControl={false}
-            className="w-full h-screen relative z-0"
+            className="w-full h-screen"
         >
             <ZoomControl position="bottomright" />
             <MapEventHandler onMapMove={onMapMove} />

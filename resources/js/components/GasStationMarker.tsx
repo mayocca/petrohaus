@@ -1,4 +1,4 @@
-import { Marker, Popup, useMap } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import type { GasStation } from "../types";
 import { divIcon } from "leaflet";
 
@@ -75,80 +75,6 @@ export default function GasStationMarker({
                     >
                         {station.address}, {station.city}
                     </p>
-
-                    {/* Show day/night prices in popup */}
-                    {/* <div className="space-y-2">
-                                {station.prices.map(
-                                    (productPrice, priceIndex) => (
-                                        <div
-                                            key={priceIndex}
-                                            style={{
-                                                background: "#f0f8ff",
-                                                padding: "8px",
-                                                borderRadius: "4px",
-                                                borderLeft: "4px solid #2F6DB6",
-                                                marginBottom: "4px",
-                                            }}
-                                        >
-                                            <p
-                                                style={{
-                                                    margin: "0 0 4px 0",
-                                                    fontSize: "14px",
-                                                    color: "#333",
-                                                    fontWeight: "bold",
-                                                }}
-                                            >
-                                                {productPrice.product_name}
-                                            </p>
-
-                                            {productPrice.day_price && (
-                                                <p
-                                                    style={{
-                                                        margin: "2px 0",
-                                                        fontSize: "12px",
-                                                        color: "#2F6DB6",
-                                                    }}
-                                                >
-                                                    ☀️ Día:{" "}
-                                                    <strong>
-                                                        {productPrice.day_price}
-                                                    </strong>
-                                                </p>
-                                            )}
-
-                                            {productPrice.night_price && (
-                                                <p
-                                                    style={{
-                                                        margin: "2px 0",
-                                                        fontSize: "12px",
-                                                        color: "#2F6DB6",
-                                                    }}
-                                                >
-                                                    🌙 Noche:{" "}
-                                                    <strong>
-                                                        {
-                                                            productPrice.night_price
-                                                        }
-                                                    </strong>
-                                                </p>
-                                            )}
-
-                                            <p
-                                                style={{
-                                                    margin: "4px 0 0 0",
-                                                    fontSize: "11px",
-                                                    color: "#888",
-                                                }}
-                                            >
-                                                Actualizado:{" "}
-                                                {new Date(
-                                                    productPrice.validity_date
-                                                ).toLocaleDateString("es-AR")}
-                                            </p>
-                                        </div>
-                                    )
-                                )}
-                            </div> */}
                 </div>
             </Popup>
         </Marker>
