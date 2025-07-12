@@ -1,12 +1,11 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { divIcon } from "leaflet";
-import "leaflet/dist/leaflet.css";
+import { Marker, Popup, useMap } from "react-leaflet";
 import type { GasStation } from "../types";
+import { divIcon } from "leaflet";
 
-interface SimpleMapProps {
-    gasStations: GasStation[];
+interface GasStationMarkerProps {
+    station: GasStation;
+    index: number;
 }
-
 function createGasStationIcon(index: number) {
     return divIcon({
         html: `
@@ -34,63 +33,51 @@ function createGasStationIcon(index: number) {
     });
 }
 
-export default function Map({ gasStations }: SimpleMapProps) {
+export default function GasStationMarker({
+    station,
+    index,
+}: GasStationMarkerProps) {
     return (
-        <MapContainer
-            center={[-40, -59]}
-            zoom={4}
-            zoomControl={true}
-            style={{ width: "100%", height: "100vh" }}
-            className="z-0"
+        <Marker
+            key={`${station.id}-${index}`}
+            position={[
+                station.location.coordinates[1],
+                station.location.coordinates[0],
+            ]}
+            icon={createGasStationIcon(index)}
         >
-            <TileLayer
-                url="https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png"
-                attribution='<a href="http://www.ign.gob.ar/AreaServicios/Argenmap/Introduccion" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>'
-                minZoom={3}
-                maxZoom={18}
-            />
+            <Popup>
+                <div style={{ minWidth: "200px" }}>
+                    <h4
+                        style={{
+                            margin: "0 0 8px 0",
+                            color: "#2F6DB6",
+                            fontWeight: "bold",
+                        }}
+                    >
+                        {station.franchise_name}
+                    </h4>
+                    <p
+                        style={{
+                            margin: "0 0 4px 0",
+                            fontSize: "14px",
+                            color: "#333",
+                        }}
+                    >
+                        <strong>{station.name}</strong>
+                    </p>
+                    <p
+                        style={{
+                            margin: "0 0 8px 0",
+                            fontSize: "12px",
+                            color: "#666",
+                        }}
+                    >
+                        {station.address}, {station.city}
+                    </p>
 
-            {gasStations.map((station, index) => (
-                <Marker
-                    key={`${station.id}-${index}`}
-                    position={[
-                        station.location.coordinates[1],
-                        station.location.coordinates[0],
-                    ]}
-                    icon={createGasStationIcon(index)}
-                >
-                    <Popup>
-                        <div style={{ minWidth: "200px" }}>
-                            <h4
-                                style={{
-                                    margin: "0 0 8px 0",
-                                    color: "#2F6DB6",
-                                    fontWeight: "bold",
-                                }}
-                            >
-                                {station.franchise_name}
-                            </h4>
-                            <p
-                                style={{
-                                    margin: "0 0 4px 0",
-                                    fontSize: "14px",
-                                    color: "#333",
-                                }}
-                            >
-                                <strong>{station.name}</strong>
-                            </p>
-                            <p
-                                style={{
-                                    margin: "0 0 8px 0",
-                                    fontSize: "12px",
-                                    color: "#666",
-                                }}
-                            >
-                                {station.address}, {station.city}
-                            </p>
-
-                            {/* Show day/night prices in popup */}
-                            {/* <div className="space-y-2">
+                    {/* Show day/night prices in popup */}
+                    {/* <div className="space-y-2">
                                 {station.prices.map(
                                     (productPrice, priceIndex) => (
                                         <div
@@ -162,10 +149,8 @@ export default function Map({ gasStations }: SimpleMapProps) {
                                     )
                                 )}
                             </div> */}
-                        </div>
-                    </Popup>
-                </Marker>
-            ))}
-        </MapContainer>
+                </div>
+            </Popup>
+        </Marker>
     );
 }

@@ -1,33 +1,45 @@
 import { Head } from "@inertiajs/react";
-import Map from "../components/Map";
+import BackgroundMap from "@/components/BackgroundMap";
 import type { GasStation } from "../types";
+import SearchAreaButton from "@/components/SearchAreaButton";
+import { useState } from "react";
 
 interface IndexProps {
     gasStations: GasStation[];
 }
 
 export default function Index({ gasStations }: IndexProps) {
+    const [mapBounds, setMapBounds] = useState<{
+        north: number;
+        south: number;
+        east: number;
+        west: number;
+    } | null>(null);
+    const [showSearchButton, setShowSearchButton] = useState(false);
+
+    const handleMapMove = (bounds: {
+        north: number;
+        south: number;
+        east: number;
+        west: number;
+    }) => {
+        setMapBounds(bounds);
+        setShowSearchButton(true);
+    };
+
     return (
         <>
             <Head title="Petrohaus" />
 
-            <div className="relative w-full h-screen">
-                <Map gasStations={gasStations} />
+            <BackgroundMap
+                gasStations={gasStations}
+                onMapMove={handleMapMove}
+            />
 
-                {/* <ProductPopup
-                    products={products}
-                    selectedProduct={selectedProduct}
-                    onProductSelect={handleProductSelect}
-                    onSearch={handleSearch}
-                    isSearching={false}
-                />
-
-                <CompanyList
-                    gasStations={gasStations}
-                    isVisible={showResults}
-                    onClose={handleCloseResults}
-                /> */}
-            </div>
+            <SearchAreaButton
+                bounds={mapBounds || undefined}
+                visible={showSearchButton}
+            />
         </>
     );
 }
