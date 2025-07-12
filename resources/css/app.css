@@ -203,3 +203,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Ensure proper z-index layering for map and UI elements */
+.leaflet-container {
+    z-index: 0 !important;
+}
+
+.leaflet-control-container {
+    z-index: 10 !important;
+}
+
+.leaflet-popup {
+    z-index: 20 !important;
+}
+
+.leaflet-marker-pane {
+    z-index: 15 !important;
+}
