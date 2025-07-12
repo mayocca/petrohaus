@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Modules\Dataset\Actions\FetchDatasetStreamIterator;
@@ -10,6 +12,8 @@ use Illuminate\Database\Seeder;
 
 class PriceSeeder extends Seeder
 {
+    private const ROWS_COUNT = 1000;
+
     use WithoutModelEvents;
 
     /**
@@ -19,9 +23,11 @@ class PriceSeeder extends Seeder
         FetchDatasetStreamIterator $fetchDatasetStreamIterator,
         UpsertDatasetRow $upsertDatasetRow,
     ): void {
-        $rows = $fetchDatasetStreamIterator->invoke(
-            url: base_path('tests/Data/dataset.csv'),
-        );
+        $rows = $fetchDatasetStreamIterator
+            ->invoke(
+                url: base_path('tests/Data/dataset.csv'),
+            )
+            ->take(self::ROWS_COUNT);
 
         $this->command->info(sprintf('Seeding %s prices...', $rows->count()));
 

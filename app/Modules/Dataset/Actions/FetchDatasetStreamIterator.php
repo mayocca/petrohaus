@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Dataset\Actions;
 
 use App\Modules\Dataset\Messages\DatasetRow;
@@ -30,15 +32,19 @@ readonly class FetchDatasetStreamIterator
                 throw new Exception('Failed to open file');
             }
 
-            if ($skipHeader) {
-                fgetcsv($handle, escape: '\\');
-            }
+            try {
+                if ($skipHeader) {
+                    fgetcsv($handle, escape: '\\');
+                }
 
-            while (($line = fgetcsv($handle, escape: '\\')) !== false) {
-                yield $this->transformCsvRowToMessage->invoke($line);
+                while (($line = fgetcsv($handle, escape: '\\')) !== false) {
+                    yield $this->transformCsvRowToMessage->invoke($line);
+                }
+            } finally {
+                // Handle is closed in finally block to ensure it is closed even if the stream is interrupted
+                // or the stream is not fully read.
+                fclose($handle);
             }
-
-            fclose($handle);
         });
 
         return $lazyCollection;
