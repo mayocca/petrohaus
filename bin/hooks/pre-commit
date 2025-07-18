@@ -2,8 +2,12 @@
 
 echo "Running pre-commit hook..."
 
-# Get staged PHP files
 staged_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.php$')
+
+if [ -z "$staged_files" ]; then
+    echo "No PHP files staged for commit."
+    exit 0
+fi
 
 # Run Pint
 ./vendor/bin/pint --no-interaction $staged_files && git add $staged_files
