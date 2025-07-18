@@ -9,9 +9,6 @@ console_command = 'php /var/www/html/artisan tinker'
   APP_URL = 'https://petrohaus.fly.dev'
   OCTANE_HTTPS = 'true'
 
-[deploy]
-  release_command = '/usr/local/bin/php artisan migrate --force --isolated'
-
 [http_service]
   internal_port = 8080
   force_https = true
