@@ -12,7 +12,8 @@ on:
   merge_group:
 
 permissions:
-  contents: write
+  contents: read
+  packages: write
 
 jobs:
   test:
