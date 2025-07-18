@@ -75,4 +75,4 @@ RUN composer dump-autoload --optimize
 EXPOSE 8080
 
 # --* start octane *--
-CMD ["php", "artisan", "octane:start", "--host=0.0.0.0", "--port=8080"]
+ENTRYPOINT ["php", "artisan", "octane:start", "--host=0.0.0.0", "--port=8080"]
