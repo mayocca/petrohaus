@@ -8,6 +8,9 @@ console_command = 'php /var/www/html/artisan tinker'
 [env]
   APP_URL = 'https://petrohaus.fly.dev'
   OCTANE_HTTPS = 'true'
+  SENTRY_ENABLE_LOGS = 'true'
+  SENTRY_TRACES_SAMPLE_RATE = '0.1'
+  SENTRY_PROFILES_SAMPLE_RATE = '0.1'
 
 [http_service]
   internal_port = 8080

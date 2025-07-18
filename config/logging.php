@@ -19,7 +19,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stderr'),
+    'default' => env('LOG_CHANNEL', 'stack'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', env('LOG_STACK', 'single,stderr')),
+            'channels' => explode(',', env('LOG_STACK', 'stderr,sentry_logs')),
             'ignore_exceptions' => false,
         ],
 
@@ -93,6 +93,13 @@ return [
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
+        ],
+
+        'sentry_logs' => [
+            'driver' => 'sentry_logs',
+            // The minimum logging level at which this handler will be triggered
+            // Available levels: debug, info, notice, warning, error, critical, alert, emergency
+            'level' => env('LOG_LEVEL', 'info'), // defaults to `debug` if not set
         ],
 
         'stderr' => [
