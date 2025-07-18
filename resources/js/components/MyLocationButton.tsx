@@ -8,6 +8,7 @@ interface MyLocationButtonProps {
     hasLocation: boolean;
     loading: boolean;
     error: GeolocationPositionError | null;
+    permission: PermissionState | null;
 }
 
 export default function MyLocationButton({
@@ -16,7 +17,13 @@ export default function MyLocationButton({
     hasLocation,
     loading,
     error,
+    permission,
 }: MyLocationButtonProps) {
+    // Only show the button if permission is granted
+    if (permission !== "granted") {
+        return null;
+    }
+
     const getButtonVariant = () => {
         if (error) return "destructive";
         if (hasLocation) return "default";
