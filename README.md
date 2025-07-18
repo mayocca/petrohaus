@@ -7,7 +7,7 @@
 **Encuentra los mejores precios de combustibles en tu zona**
 
 <p>
-<img src="https://img.shields.io/github/actions/workflow/status/mayocca/petrohaus/lint.yml?label=tests" alt="Tests Badge">
+<img src="https://img.shields.io/github/actions/workflow/status/mayocca/petrohaus/ci.yml?label=tests" alt="Tests Badge">
 </p>
 
 </div>
@@ -71,6 +71,6 @@
     -   Instalar dependencias (`composer install`, `npm install`)
     -   Ejecutar Pint (estilo de código PHP)
     -   Ejecutar PHPStan (análisis estático)
--   Ver [`.github/workflows/lint.yml`](../.github/workflows/lint.yml) para más detalles.
+-   Ver [`.github/workflows/ci.yml`](.github/workflows/ci.yml) para más detalles.
 
 ---
