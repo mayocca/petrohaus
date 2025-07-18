@@ -32,7 +32,7 @@ class HomeController extends Controller
                     $query->where('product_id', $data['product_id']);
                 })
                     ->with([
-                        'companyProducts' => function (Builder $query) use ($data) {
+                        'companyProducts' => function ($query) use ($data) {
                             $query->where('product_id', $data['product_id']);
                         },
                     ]);
