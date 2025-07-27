@@ -116,6 +116,7 @@ export default function Index({ gasStations }: IndexProps) {
                 hasLocation={!!position}
                 loading={loading}
                 error={error}
+                permission={permission}
             />
 
             {/* Location Permission Dialog */}
